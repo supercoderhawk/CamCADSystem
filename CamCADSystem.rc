@@ -1,0 +1,610 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\CamCADSystem.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""afxres.rc""         // 标准组件\r\n"
+    "#include ""afxprint.rc""       // 打印/打印预览资源\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\CamCADSystem.ico"
+IDR_CamCADSystemTYPE    ICON                    "res\\CamCADSystemDoc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "新建(&N)\tCtrl+N",              ID_FILE_NEW
+        MENUITEM "打开(&O)...\tCtrl+O",           ID_FILE_OPEN
+        MENUITEM "保存(&S)\tCtrl+S",              ID_FILE_SAVE
+        MENUITEM "另存为(&A)...",                  ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "打印(&P)...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "打印预览(&V)",                    ID_FILE_PRINT_PREVIEW
+        MENUITEM "打印设置(&R)...",                 ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "最近的文件",                       ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "退出(&X)",                      ID_APP_EXIT
+    END
+    POPUP "视图(&V)"
+    BEGIN
+        MENUITEM "工具栏(&T)",                     ID_VIEW_TOOLBAR
+        MENUITEM "状态栏(&S)",                     ID_VIEW_STATUS_BAR
+    END
+    POPUP "操作(&O)"
+    BEGIN
+        MENUITEM "输入参数(&E)",                    ID_32771
+        MENUITEM "绘制运动规律(&M)",                  ID_32772
+        MENUITEM "绘制凸轮(&D)",                    ID_32773
+        MENUITEM "局部修改(&P)",                    ID_32774
+        MENUITEM "生成数控代码(&G)",                  ID_32776
+        MENUITEM "压力角校核(&C)",                   ID_32775
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "关于 PartModify(&A)...",        ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 317, 139
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 CamCADSystem"
+FONT 9, "宋体", 0, 0, 0x1
+BEGIN
+    LTEXT           "盘形凸轮机构CAD系统 v1.0 版",IDC_STATIC,36,37,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2015 夏宇彬 All Right Reserved",IDC_STATIC,35,65,196,14
+    DEFPUSHBUTTON   "确定",IDOK,260,7,50,16,WS_GROUP
+END
+
+IDD_DIALOG_SWGCODE DIALOGEX 0, 0, 357, 260
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "显示数控代码"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,300,135,50,14
+    PUSHBUTTON      "取消",IDCANCEL,300,159,50,14
+    LTEXT           "静态",IDC_STATIC,22,17,192,228
+END
+
+IDD_DIALOG_CNCPARA DIALOGEX 0, 0, 376, 189
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "输入数控加工参数"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,319,130,50,14
+    PUSHBUTTON      "取消",IDCANCEL,319,154,50,14
+    EDITTEXT        IDC_EDITKNIFE,89,31,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_KNIFEID,89,62,40,14,ES_AUTOHSCROLL
+    LTEXT           "刀具编号",IDC_STATIC,43,37,33,8
+    LTEXT           "刀面",IDC_STATIC,39,68,17,8
+    EDITTEXT        IDC_EDIT_FEED,89,99,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SPEED,89,125,40,14,ES_AUTOHSCROLL
+    LTEXT           "进给率",IDC_STATIC,39,105,25,8
+    LTEXT           "主轴转速",IDC_STATIC,42,131,33,8
+END
+
+IDD_DIALOG_MODIFY DIALOGEX 0, 0, 579, 253
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "局部修改"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,522,214,50,14
+    LTEXT           "静态",IDC_STATIC,31,20,478,211,SS_NOTIFY
+    PUSHBUTTON      "清除",1002,522,183,50,14
+    PUSHBUTTON      "绘制",IDC_BUTTON2,522,151,50,14
+    EDITTEXT        IDC_EDIT1,519,54,40,14,ES_AUTOHSCROLL
+END
+
+IDD_DIALOG_ENTPARA DIALOGEX 0, 0, 418, 234
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "输入基本参数"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "输入",IDC_BUTTON1,333,175,54,14
+    EDITTEXT        IDC_EDIT_H,241,38,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_TC,93,38,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_YXZ,93,68,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_HC,93,97,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_JXZ,93,125,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_E,241,68,40,14,ES_AUTOHSCROLL
+    LTEXT           "推程运动角：",-1,44,44,49,8
+    LTEXT           "远休止角：",-1,48,74,45,8,SS_PATHELLIPSIS
+    LTEXT           "回程运动角：",-1,44,103,49,8
+    LTEXT           "近休止角：",-1,52,131,41,8
+    LTEXT           "工作行程：",-1,200,44,41,8
+    LTEXT           "偏心距：",-1,208,74,33,8
+    EDITTEXT        IDC_EDIT_R0,241,97,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "基圆半径：",-1,200,103,41,8
+    COMBOBOX        IDC_COMBO1,93,154,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "从动件类型：",-1,44,158,49,8
+    EDITTEXT        IDC_EDIT_ALPHA,172,186,40,14,ES_AUTOHSCROLL
+    LTEXT           "滚子半径",IDC_STATIC_R,93,192,33,8
+    COMBOBOX        IDC_COMBO2,241,127,48,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "推程运动规律",-1,192,131,49,8
+    COMBOBOX        IDC_COMBO3,241,154,48,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "回程运动规律",IDC_STATIC_HC,192,158,49,8
+    CONTROL         "推程回程运动规律相同",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,299,129,96,10
+END
+
+IDD_DIALOG_CHECK DIALOGEX 0, 0, 280, 154
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,223,100,50,14
+    PUSHBUTTON      "取消",IDCANCEL,223,122,50,14
+    PUSHBUTTON      "校核",IDC_BUTTON_CHECK,223,73,50,14
+    EDITTEXT        IDC_EDIT_ENTER,102,28,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SHOW,31,67,178,30,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "许用压力角：",IDC_STATIC,35,31,49,8
+END
+
+IDD_DIALOG_MOTION DIALOGEX 0, 0, 411, 191
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "输入运动规律"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,354,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,354,24,50,14
+    EDITTEXT        IDC_EDIT_T1,85,30,40,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_T2,85,61,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_T3,85,88,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_T4,85,120,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_T5,203,30,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_T6,203,61,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_T7,203,88,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_T8,203,120,40,14,ES_AUTOHSCROLL
+    LTEXT           "T0:",IDC_STATIC,73,36,12,8
+    LTEXT           "T1:",IDC_STATIC,73,67,12,8
+    LTEXT           "T2:",IDC_STATIC,73,94,12,8
+    LTEXT           "T3:",IDC_STATIC,73,126,12,8
+    LTEXT           "T4:",IDC_STATIC,191,36,12,8
+    LTEXT           "T5:",IDC_STATIC,191,67,12,8
+    LTEXT           "T6:",IDC_STATIC,191,94,12,8
+    LTEXT           "T7:",IDC_STATIC,191,126,12,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "NanjingNormalUniversity"
+            VALUE "FileDescription", "盘形凸轮机构CAD系统"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "CamCADSystem.exe"
+            VALUE "LegalCopyright", "(C) NanjingNormalUniversity。保留所有权利。"
+            VALUE "OriginalFilename", "CamCADSystem.exe"
+            VALUE "ProductName", "盘形凸轮机构CAD系统"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 310
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 132
+    END
+
+    IDD_DIALOG_SWGCODE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 350
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 253
+    END
+
+    IDD_DIALOG_CNCPARA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 369
+        VERTGUIDE, 89
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 182
+        HORZGUIDE, 45
+        HORZGUIDE, 76
+        HORZGUIDE, 113
+        HORZGUIDE, 139
+        HORZGUIDE, 166
+    END
+
+    IDD_DIALOG_MODIFY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 572
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 246
+    END
+
+    IDD_DIALOG_ENTPARA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 411
+        VERTGUIDE, 93
+        VERTGUIDE, 172
+        VERTGUIDE, 241
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 227
+        HORZGUIDE, 52
+        HORZGUIDE, 82
+        HORZGUIDE, 111
+        HORZGUIDE, 139
+        HORZGUIDE, 166
+        HORZGUIDE, 200
+    END
+
+    IDD_DIALOG_CHECK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 273
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 147
+    END
+
+    IDD_DIALOG_MOTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 404
+        VERTGUIDE, 85
+        VERTGUIDE, 203
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 184
+        HORZGUIDE, 44
+        HORZGUIDE, 75
+        HORZGUIDE, 102
+        HORZGUIDE, 134
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_ENTPARA DLGINIT
+BEGIN
+    IDC_COMBO1, 0x403, 5, 0
+0xe2bc, 0xa5b6, "\000" 
+    IDC_COMBO1, 0x403, 5, 0
+0xf6b9, 0xd3d7, "\000" 
+    IDC_COMBO1, 0x403, 5, 0
+0xbdc6, 0xe5b0, "\000" 
+    IDC_COMBO2, 0x403, 5, 0
+0xc8b5, 0xd9cb, "\000" 
+    IDC_COMBO2, 0x403, 7, 0
+0xc8b5, 0xd3bc, 0xd9cb, "\000" 
+    IDC_COMBO2, 0x403, 5, 0
+0xe0d3, 0xd2cf, "\000" 
+    IDC_COMBO2, 0x403, 5, 0
+0xdab0, 0xdfcf, "\000" 
+    IDC_COMBO2, 0x403, 9, 0
+0xded0, 0xfdd5, 0xddcc, 0xced0, "\000" 
+    IDC_COMBO2, 0x403, 9, 0
+0xddcc, 0xced0, 0xdab0, 0xdfcf, "\000" 
+    IDC_COMBO2, 0x403, 7, 0
+0xd4d7, 0xa8b6, 0xe5d2, "\000" 
+    IDC_COMBO3, 0x403, 5, 0
+0xc8b5, 0xd9cb, "\000" 
+    IDC_COMBO3, 0x403, 7, 0
+0xc8b5, 0xd3bc, 0xd9cb, "\000" 
+    IDC_COMBO3, 0x403, 5, 0
+0xe0d3, 0xd2cf, "\000" 
+    IDC_COMBO3, 0x403, 5, 0
+0xdab0, 0xdfcf, "\000" 
+    IDC_COMBO3, 0x403, 9, 0
+0xded0, 0xfdd5, 0xddcc, 0xced0, "\000" 
+    IDC_COMBO3, 0x403, 9, 0
+0xddcc, 0xced0, 0xdab0, 0xdfcf, "\000" 
+    IDC_COMBO3, 0x403, 7, 0
+0xd4d7, 0xa8b6, 0xe5d2, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDP_OLE_INIT_FAILED     "OLE 初始化失败。请确保 OLE 库是正确的版本。"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "盘形凸轮CAD系统\n\nCamCADSystem\nCamCADSystem Files (*.dxf)\n.dxf\nCamCADSystem.Document\nCamCADSystem.Document"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "CamCADSystem"
+    AFX_IDS_IDLEMESSAGE     "就绪"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "创建新文档\n新建"
+    ID_FILE_OPEN            "打开现有文档\n打开"
+    ID_FILE_CLOSE           "关闭活动文档\n关闭"
+    ID_FILE_SAVE            "保存活动文档\n保存"
+    ID_FILE_SAVE_AS         "用新名称保存活动文档\n另存为"
+    ID_FILE_PAGE_SETUP      "更改打印选项\n页面设置"
+    ID_FILE_PRINT_SETUP     "更改打印机选项和打印选项\n打印设置"
+    ID_FILE_PRINT           "打印活动文档\n打印"
+    ID_FILE_PRINT_PREVIEW   "显示整页\n打印预览"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "显示程序信息、版本号和版权\n关于"
+    ID_APP_EXIT             "退出应用程序；提示保存文档\n退出"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "打开此文档"
+    ID_FILE_MRU_FILE2       "打开此文档"
+    ID_FILE_MRU_FILE3       "打开此文档"
+    ID_FILE_MRU_FILE4       "打开此文档"
+    ID_FILE_MRU_FILE5       "打开此文档"
+    ID_FILE_MRU_FILE6       "打开此文档"
+    ID_FILE_MRU_FILE7       "打开此文档"
+    ID_FILE_MRU_FILE8       "打开此文档"
+    ID_FILE_MRU_FILE9       "打开此文档"
+    ID_FILE_MRU_FILE10      "打开此文档"
+    ID_FILE_MRU_FILE11      "打开此文档"
+    ID_FILE_MRU_FILE12      "打开此文档"
+    ID_FILE_MRU_FILE13      "打开此文档"
+    ID_FILE_MRU_FILE14      "打开此文档"
+    ID_FILE_MRU_FILE15      "打开此文档"
+    ID_FILE_MRU_FILE16      "打开此文档"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "切换到下一个窗格\n下一窗格"
+    ID_PREV_PANE            "切换回上一个窗格\n上一窗格"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "将活动窗口拆分为多个窗格\n拆分"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "清除选定内容\n清除"
+    ID_EDIT_CLEAR_ALL       "清除全部内容\n全部清除"
+    ID_EDIT_COPY            "复制选定内容并将其放到剪贴板上\n复制"
+    ID_EDIT_CUT             "剪切选定内容并将其放到剪贴板上\n剪切"
+    ID_EDIT_FIND            "查找指定的文本\n查找"
+    ID_EDIT_PASTE           "插入剪贴板内容\n粘贴"
+    ID_EDIT_REPEAT          "重复上一操作\n重复"
+    ID_EDIT_REPLACE         "用其他文本替换特定的文本\n替换"
+    ID_EDIT_SELECT_ALL      "选定整个文档\n全选"
+    ID_EDIT_UNDO            "撤消上一操作\n撤消"
+    ID_EDIT_REDO            "恢复上次撤消的操作\n重做"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "显示或隐藏工具栏\n切换工具栏"
+    ID_VIEW_STATUS_BAR      "显示或隐藏状态栏\n切换状态栏"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "更改窗口大小"
+    AFX_IDS_SCMOVE          "更改窗口位置"
+    AFX_IDS_SCMINIMIZE      "将窗口缩小为图标"
+    AFX_IDS_SCMAXIMIZE      "使窗口最大化显示"
+    AFX_IDS_SCNEXTWINDOW    "切换到下一个文档窗口"
+    AFX_IDS_SCPREVWINDOW    "切换到前一个文档窗口"
+    AFX_IDS_SCCLOSE         "关闭活动窗口并提示保存文档"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "将窗口恢复到正常大小"
+    AFX_IDS_SCTASKLIST      "激活任务列表"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_PREVIEW_CLOSE   "关闭打印预览模式\n取消预览"
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\CamCADSystem.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "afxres.rc"         // 标准组件
+#include "afxprint.rc"       // 打印/打印预览资源
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
