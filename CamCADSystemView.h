@@ -21,7 +21,9 @@ public:
 
 private:
 	bool m_bIsEnterModify;
-	bool m_bIsDraw;
+	bool m_bIsDrawCam;
+	bool m_bIsDrawMotion;
+//	bool m_bIsDraw
 	CArray<double> t;
 	CArray<double> h;
 	
@@ -63,6 +65,11 @@ public:
 	void CalMotionLaw(int nIndexMotion,
 					int nIndexMotionReturn,
 					int CheckStyle);
+	// 绘制运动规律的位移
+	void DrawMotionLaw(CDC* pDC);
+	afx_msg void OnFileSave();
+	afx_msg void OnFileSaveAs();
+	void Save3BSpline(DL_Dxf* dxf,DL_WriterA* dw);
 };
 
 #ifndef _DEBUG  // CamCADSystemView.cpp 中的调试版本

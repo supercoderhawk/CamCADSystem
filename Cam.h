@@ -8,7 +8,7 @@ class CCam
 public:
 	CCam(void);
 	~CCam(void);
-private:
+public:
 	// 推程运动角
 	double m_dDelta0;
 	// 远休止角
@@ -75,16 +75,23 @@ public:
 
 	double mpx[NUM+3];		//控制点横坐标
 	double mpy[NUM+3];		//控制点纵坐标
-
 	
+	//从动件为滚子时的计算参数
+	double sintheta[NUM];
+	double costheta[NUM];
+	double dsdelta[NUM];
+
 	double px2[COUNT];		// 采样点横坐标
 	double py2[COUNT];		// 采样点纵坐标
 
 	double mpx2[COUNT+3];		//控制点横坐标
 	double mpy2[COUNT+3];		//控制点纵坐标
 
-	
-	
+	//从动件为滚子时的计算参数
+	double sintheta2[COUNT];
+	double costheta2[COUNT];
+	double dsdelta2[COUNT];
+
 	CString m_sKnifeID;
 	CString m_sKnifeFace;
 	double m_dFeed;
@@ -104,12 +111,12 @@ public:
 public:
 	// 计算控制点坐标
 	void CalcCtrlPoint(void);
-private:
+public:
+
 	int m_nIndexMotion;
 	int m_nIndexMotionReturn;
 	int m_nIndexFollower;
 
-	
 	bool m_bDataRise;
 	bool m_bDataReturn;
 	bool m_bData2Rise;

@@ -48,9 +48,9 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\CamCADSystem.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
-    "#include ""afxres.rc""         // 标准组件\r\n"
-    "#include ""afxprint.rc""       // 打印/打印预览资源\r\n"
+    "#include ""res\\CamCADSystem.rc2""  // ·? Microsoft Visual C++ ±à?-μ?×ê?′\r\n"
+    "#include ""afxres.rc""         // ±ê×?×é?t\r\n"
+    "#include ""afxprint.rc""       // ′òó?/′òó??¤àà×ê?′\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -196,12 +196,12 @@ BEGIN
     PUSHBUTTON      "取消",IDCANCEL,319,154,50,14
     EDITTEXT        IDC_EDITKNIFE,89,31,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_KNIFEID,89,62,40,14,ES_AUTOHSCROLL
-    LTEXT           "刀具编号",IDC_STATIC,43,37,33,8
-    LTEXT           "刀面",IDC_STATIC,39,68,17,8
+    LTEXT           "刀具编号",IDC_STATIC,47,37,33,8
+    LTEXT           "刀面",IDC_STATIC,47,68,17,8
     EDITTEXT        IDC_EDIT_FEED,89,99,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_SPEED,89,125,40,14,ES_AUTOHSCROLL
-    LTEXT           "进给率",IDC_STATIC,39,105,25,8
-    LTEXT           "主轴转速",IDC_STATIC,42,131,33,8
+    LTEXT           "进给率",IDC_STATIC,47,105,25,8
+    LTEXT           "主轴转速",IDC_STATIC,47,131,33,8
 END
 
 IDD_DIALOG_MODIFY DIALOGEX 0, 0, 579, 253
@@ -209,11 +209,12 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "局部修改"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "确定",IDOK,522,214,50,14
+    DEFPUSHBUTTON   "确定",IDOK,519,212,50,14
     LTEXT           "静态",IDC_STATIC,31,20,478,211,SS_NOTIFY
-    PUSHBUTTON      "清除",1002,522,183,50,14
-    PUSHBUTTON      "绘制",IDC_BUTTON2,522,151,50,14
+    PUSHBUTTON      "清除",1002,519,182,50,14
+    PUSHBUTTON      "绘制",IDC_BUTTON2,519,151,50,14
     EDITTEXT        IDC_EDIT1,519,54,40,14,ES_AUTOHSCROLL
+    LTEXT           "放大倍数",IDC_STATIC,520,39,33,8
 END
 
 IDD_DIALOG_ENTPARA DIALOGEX 0, 0, 418, 234
@@ -221,7 +222,7 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "输入基本参数"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    PUSHBUTTON      "输入",IDC_BUTTON1,333,175,54,14
+    PUSHBUTTON      "输入",IDC_BUTTON1,337,200,54,14
     EDITTEXT        IDC_EDIT_H,241,38,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_TC,93,38,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_YXZ,93,68,40,14,ES_AUTOHSCROLL
@@ -236,20 +237,20 @@ BEGIN
     LTEXT           "偏心距：",-1,208,74,33,8
     EDITTEXT        IDC_EDIT_R0,241,97,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "基圆半径：",-1,200,103,41,8
-    COMBOBOX        IDC_COMBO1,93,154,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO1,93,154,48,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "从动件类型：",-1,44,158,49,8
     EDITTEXT        IDC_EDIT_ALPHA,172,186,40,14,ES_AUTOHSCROLL
-    LTEXT           "滚子半径",IDC_STATIC_R,93,192,33,8
+    LTEXT           "滚子半径：",IDC_STATIC_R,128,189,41,11
     COMBOBOX        IDC_COMBO2,241,127,48,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "推程运动规律",-1,192,131,49,8
+    LTEXT           "推程运动规律：",-1,184,131,57,8
     COMBOBOX        IDC_COMBO3,241,154,48,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "回程运动规律",IDC_STATIC_HC,192,158,49,8
+    LTEXT           "回程运动规律：",IDC_STATIC_HC,184,158,57,8
     CONTROL         "推程回程运动规律相同",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,299,129,96,10
 END
 
 IDD_DIALOG_CHECK DIALOGEX 0, 0, 280, 154
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
+CAPTION "压力角校核"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,223,100,50,14
@@ -353,6 +354,7 @@ BEGIN
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 369
+        VERTGUIDE, 47
         VERTGUIDE, 89
         TOPMARGIN, 7
         BOTTOMMARGIN, 182
@@ -367,6 +369,7 @@ BEGIN
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 572
+        VERTGUIDE, 519
         TOPMARGIN, 7
         BOTTOMMARGIN, 246
     END

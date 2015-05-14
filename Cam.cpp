@@ -41,21 +41,21 @@ CCam::CCam(void)
 
 CCam::~CCam(void)
 {
-	if (m_bDataRise)
-	{
-		delete t;
-	if(m_bDataReturn)
-		delete h;
-	}
+//	if (m_bDataRise)
+//	{
+//		delete t;
+//	if(m_bDataReturn)
+//		delete h;
+//	}
 
-	if (m_bData2Rise)
-	{
-		delete t2;
-	}
-	if(m_bData2Return)
-	{
-		delete h2;
-	}
+//	if (m_bData2Rise)
+//	{
+//		delete t2;
+//	}
+//	if(m_bData2Return)
+//	{
+//		delete h2;
+//	}
 	if(m_bGCode)
 		delete gcode;
 	
@@ -149,8 +149,20 @@ void CCam::CalcPoint(void)
 	initM(MATCOM_VERSION);
 	Mm delta;
 	Mm ss=zeros(NUM,1);
+	Mm sinTheta=zeros(NUM,1);
+	Mm cosTheta=zeros(NUM,1);
+	Mm DsDelta=zeros(NUM,1);
 	for (int i=0;i<NUM;i++)
+	{
 		ss.r(i+1)=m_ds[i];
+		sinTheta.r(i+1)=sintheta[i];
+		cosTheta.r(i+1)=costheta[i];
+		DsDelta.r(i+1)=dsdelta[i];
+	}
+	
+	
+		
+
 	//生成向量
 	delta=colon(1*pi/180,2*pi/NUM,2*pi);
 	//转置
@@ -158,8 +170,21 @@ void CCam::CalcPoint(void)
 	Mm x;
 	Mm y;
 	//计算坐标
-	x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
-	y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
+	if(m_nIndexFollower==0)
+	{
+		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta))-times(m_drr0,cosTheta);
+		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta))-times(m_drr0,sinTheta);
+	}
+	else if(m_nIndexFollower==1)
+	{
+		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
+		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
+	}
+	else if (m_nIndexFollower==2)
+	{
+		x=times(m_dr0+ss,sin(delta))+times(DsDelta,cos(delta));
+		y=times(m_dr0+ss,cos(delta))-times(DsDelta,sin(delta));
+	}
 	
 	for (int i=0;i<NUM;i++)
 	{
@@ -172,42 +197,112 @@ void CCam::CalcPoint(void)
 // 计算运动规律参数
 void CCam::CalcParameter(void)
 {
-		
+	double dxdelta;
+	double dydelta;
+	double Delta;	
 	//远休止位移
 	for(int i=(int)m_dDelta0/TIMES;i<(int)(m_dDelta0+m_dDelta01)/TIMES;i++)
+	{
+		Delta=TIMES*i/360.0*2*Pi;
 		m_ds[i]=m_dh;
+		dsdelta[i]=0;
+		dxdelta=-m_de*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_dh)*cos(Delta);
+		dydelta=-m_de*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_dh)*sin(Delta);
+		sintheta[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		costheta[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+	}
+
 	//近休止位移
 	for(int i=(int)(m_dDelta0+m_dDelta01+m_dDelta1)/TIMES;i<NUM;i++)
+	{
+		Delta=TIMES*i/360.0*2*Pi;
 		m_ds[i]=0;
+		dsdelta[i]=0;
+		dxdelta=-m_de*sin(Delta)+
+				sqrt(m_dr0*m_dr0-m_de*m_de)*cos(Delta);
+		dydelta=-m_de*cos(Delta)-
+				sqrt(m_dr0*m_dr0-m_de*m_de)*sin(Delta);
+		sintheta[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		costheta[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+
+	}
+
 	//推程位移
 	if(m_nIndexMotion==2)
 	{
 		for(int i=0;i<(int)m_dDelta0/TIMES;i++)
+		{
+			Delta=TIMES*i/360.0*2*Pi;
 			m_ds[i]=m_dh*i*TIMES/m_dDelta0;
+			dsdelta[i]=m_dh/m_dDelta0;
+			dxdelta=(m_dh/m_dDelta0-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*cos(Delta);
+			dydelta=(m_dh/m_dDelta0-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*sin(Delta);
+			sintheta[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
 	}
 	else
 	{
 		t=new CData(tt,m_dDelta0/TIMES,m_dh);
 		m_bDataRise=true;
-		for(int i=0;i<(int)m_dDelta0/TIMES;i++)
+		for(int i=0; i<(int)m_dDelta0/TIMES;i++)
+		{
+			Delta=TIMES*i/360.0*2*Pi;
 			m_ds[i]=t->s[i];
+			dsdelta[i]=t->v[i]*m_dh/m_dDelta0;
+			dxdelta=(t->v[i]*m_dh/m_dDelta0-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*cos(Delta);
+			dydelta=(t->v[i]*m_dh/m_dDelta0-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*sin(Delta);
+			sintheta[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
+		delete t;
 
 	}
 
 	//回程位移
 	if (m_nIndexMotionReturn==2)
 	{
-		for(int i=(int)(m_dDelta0+m_dDelta01)/TIMES;i<(int)(m_dDelta0+m_dDelta01+m_dDelta1)/TIMES;i++)
+		for(int i=(int)(m_dDelta0+m_dDelta01)/TIMES;
+			i<(int)(m_dDelta0+m_dDelta01+m_dDelta1)/TIMES;i++)
+		{
+			Delta=TIMES*i/360.0*2*Pi;
 			m_ds[i]=m_dh*(1-(i-(m_dDelta0+m_dDelta01)/TIMES)/(m_dDelta1/TIMES));
+			dsdelta[i]=-m_dh/m_dDelta0;
+			dxdelta=(-m_dh/m_dDelta0-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*cos(Delta);
+			dydelta=(-m_dh/m_dDelta0-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*sin(Delta);
+			sintheta[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
 	}
 	else
 	{
 	
 		h=new CData(th,m_dDelta1/TIMES,m_dh);
 		m_bDataReturn=true;
-		for(int i=(int)(m_dDelta0+m_dDelta01)/TIMES;i<(int)(m_dDelta0+m_dDelta01+m_dDelta1)/TIMES;i++)
+		for(int i=(int)(m_dDelta0+m_dDelta01)/TIMES;
+			i<(int)(m_dDelta0+m_dDelta01+m_dDelta1)/TIMES;i++)
+		{
+			Delta=TIMES*i/360.0*2*Pi;
 			m_ds[i]=m_dh-h->s[i-(int)(m_dDelta0+m_dDelta01)/TIMES];
+			dsdelta[i]=-h->v[i-(int)(m_dDelta0+m_dDelta01)/TIMES]*m_dh/m_dDelta0;
+			dxdelta=(-h->v[i-(int)(m_dDelta0+m_dDelta01)/TIMES]*m_dh/m_dDelta0-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*cos(Delta);
+			dydelta=(-h->v[i-(int)(m_dDelta0+m_dDelta01)/TIMES]*m_dh/m_dDelta0-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds[i])*sin(Delta);
+			sintheta[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
+		delete h;
 	}
+
 }
 
 // 计算控制点坐标
@@ -280,70 +375,88 @@ void CCam::DrawCam3BSpline(CDC* pDC, double * mpx,
 	double x = ( mpx[0] + 4.0 * mpx[1] + mpx[2] ) / 6.0+(r1.right-r1.left)/2;
 	double y = -( mpy[0] + 4.0 * mpy[1] + mpy[2] ) / 6.0+(r1.bottom-r1.top)/2;
 	
-	pDC->MoveTo((long)x,(long)y);
+	pDC->MoveTo((int)x,(int)y);
 	HPEN hPen;
 	HPEN hPenOld;
-	hPen=CreatePen( PS_SOLID, 0, RGB(0,100,0));
+	hPen=CreatePen( PS_SOLID, 0, RGB(0,0,0));
 	hPenOld = ( HPEN )SelectObject(pDC->m_hDC,hPen);
 
 		for ( int i = 0; i < nCount; i++ )
 	{
 		// 找到最大和最小的坐标，求得最大的范围，从而确定u的最小步长
-		long xMax, xMin, yMax, yMin;
-		xMax = xMin = (long)mpx[i];
-		yMax = yMin = (long)mpy[i];
-		if ( xMax < mpx[i+1] ) xMax = (long)mpx[i+1];
-		if ( xMin > mpx[i+1] ) xMin = (long)mpx[i+1];
-		if ( xMax < mpx[i+2] ) xMax = (long)mpx[i+2];
-		if ( xMin > mpx[i+2] ) xMin =(long) mpx[i+2];
-		if ( xMax < mpx[i+3] ) xMax =(long) mpx[i+3];
-		if ( xMin > mpx[i+3] ) xMin = (long)mpx[i+3];
+		int xMax, xMin, yMax, yMin;
+		xMax = xMin = mpx[i];
+		yMax = yMin = mpy[i];
+		if ( xMax < mpx[i+1] ) xMax = (int)mpx[i+1];
+		if ( xMin > mpx[i+1] ) xMin = (int)mpx[i+1];
+		if ( xMax < mpx[i+2] ) xMax = (int)mpx[i+2];
+		if ( xMin > mpx[i+2] ) xMin = (int)mpx[i+2];
+		if ( xMax < mpx[i+3] ) xMax = (int)mpx[i+3];
+		if ( xMin > mpx[i+3] ) xMin = (int)mpx[i+3];
 
-		if ( yMax < mpy[i+1] ) yMax =(long) mpy[i+1];
-		if ( yMin > mpy[i+1] ) yMin = (long)mpy[i+1];
-		if ( yMax < mpy[i+2] ) yMax = (long)mpy[i+2];
-		if ( yMin > mpy[i+2] ) yMin = (long)mpy[i+2];
-		if ( yMax < mpy[i+3] ) yMax =(long) mpy[i+3];
-		if ( yMin > mpy[i+3] ) yMin = (long)mpy[i+3];
-		double fMax = (double)(xMax - xMin);
-		if ( fMax < (double)(yMax - yMin) ) fMax = (double)(yMax - yMin);
-		double	u, uStep = 3.0 / fMax ;		// u值步长
-		
-		
-		
+		if ( yMax < mpy[i+1] ) yMax =(int)mpy[i+1];
+		if ( yMin > mpy[i+1] ) yMin = (int)mpy[i+1];
+		if ( yMax < mpy[i+2] ) yMax = (int)mpy[i+2];
+		if ( yMin > mpy[i+2] ) yMin = (int)mpy[i+2];
+		if ( yMax < mpy[i+3] ) yMax = (int)mpy[i+3];
+		if ( yMin > mpy[i+3] ) yMin = (int)mpy[i+3];
+		double fMax = (double)xMax - xMin;
+		if ( fMax < (double)(yMax - yMin) ) fMax = yMax - yMin;
+		double	u, uStep = 1.0 / fMax ;		// u值步长
+				
 		for ( u = uStep; u<=1.0; u+= uStep )
 		{
 			
-			x = (1.0-u)*(1.0-u)*(1.0-u)
-					* (double)(mpx[i])
-				+ ( 3.0*u*u*u - 6.0*u*u + 4.0 )
-					* (double)(mpx[i+1])
-				+ ( -3.0*u*u*u + 3.0*u*u + 3.0*u + 1.0 )
-					* (double)(mpx[i+2])
-				+ u*u*u
-					* (double)(mpx[i+3]);
-			y = (1.0-u)*(1.0-u)*(1.0-u)
-					* (double)(mpy[i])
-				+ ( 3.0*u*u*u - 6.0*u*u + 4.0 )
-					* (double)(mpy[i+1])
-				+ ( -3.0*u*u*u + 3.0*u*u + 3.0*u + 1.0 )
-					* (double)(mpy[i+2])
-				+ u*u*u
-					* (double)(mpy[i+3]);
+			x = (1.0-u)*(1.0-u)*(1.0-u)* mpx[i]
+				+ ( 3.0*u*u*u - 6.0*u*u + 4.0 )*mpx[i+1]
+				+ ( -3.0*u*u*u + 3.0*u*u + 3.0*u + 1.0 )*mpx[i+2]
+				+ u*u*u* mpx[i+3];
+			y = (1.0-u)*(1.0-u)*(1.0-u)* mpy[i]
+				+ ( 3.0*u*u*u - 6.0*u*u + 4.0 )* mpy[i+1]
+				+ ( -3.0*u*u*u + 3.0*u*u + 3.0*u + 1.0 )*mpy[i+2]
+				+ u*u*u*mpy[i+3];
 			x = x / 6.0;	y = y / 6.0;
 			if (pDC)
 			{
 				
-				pDC->LineTo((long)(x+r1.CenterPoint().x), (long)(-y+r1.CenterPoint().y));
+				pDC->LineTo((int)(x+r1.CenterPoint().x), (int)(-y+r1.CenterPoint().y));
 			}
 			
 		}
+	}
+
+	//如果从动件是滚子，显示滚子图像
+	if(m_nIndexFollower==0)
+	{
+		double times=0.80;
+		x=m_de;
+		y=sqrt(m_dr0*m_dr0-m_de*m_de);
+		pDC->MoveTo((int)(x+r1.CenterPoint().x),
+			(int)(-y+r1.CenterPoint().y));
+		pDC->LineTo((int)(x+r1.CenterPoint().x),
+			(int)(-y+r1.CenterPoint().y-100));
+		CPoint pt[2]={CPoint((int)x-(int)(m_drr0*times)+r1.CenterPoint().x,
+					-(int)y-(int)(m_drr0*times)+r1.CenterPoint().y),
+					CPoint((int)x+(int)(m_drr0*times)+r1.CenterPoint().x,
+					-(int)y+(int)(m_drr0*times)+r1.CenterPoint().y)};
+		pDC->Ellipse(pt[0].x, pt[0].y, pt[1].x, pt[1].y);
+	}
+	else if(m_nIndexFollower==1)
+	{
+
+	}
+	else if(m_nIndexFollower==2)
+	{
+		pDC->MoveTo(r1.CenterPoint().x-50,r1.CenterPoint().y-(int)m_dr0);
+		pDC->LineTo(r1.CenterPoint().x-50,r1.CenterPoint().y-(int)m_dr0);
+		pDC->MoveTo(r1.CenterPoint().x,r1.CenterPoint().y-(int)m_dr0);
+		pDC->LineTo(r1.CenterPoint().x,r1.CenterPoint().y-(int)m_dr0-50);
 	}
 //		for(int i=0;i<100;i++)
 //		pDC->LineTo((long)(px[0]+(r1.right-r1.left)/2), (long)(-py[0]-i+(r1.bottom-r1.top)/2));
 	SelectObject(pDC->m_hDC,hPenOld);
 	DeleteObject( hPen );
-
+	
 
 
 }
@@ -361,39 +474,105 @@ void CCam::DrawCamLine(CDC* pDC, double* px, double* py, int nCount, CRect r1, i
 
 void CCam::CalcParameter2(void)
 {
-
+	double dxdelta;
+	double dydelta;
+	double Delta;	
 	for(int i=(int)m_dDelta0;i<(int)(m_dDelta0+m_dDelta01);i++)
+	{
+		Delta=i/360.0*2*Pi;
 		m_ds2[i]=m_dh;
-	for(int i=(int)(m_dDelta0+m_dDelta01+m_dDelta1);i<COUNT;i++)
-		m_ds2[i]=0;
+		dsdelta2[i]=0;
+		dxdelta=-m_de*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_dh)*cos(Delta);
+		dydelta=-m_de*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_dh)*sin(Delta);
+		sintheta2[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		costheta2[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+	}
 
-	//计算推程回程参数
+	for(int i=(int)(m_dDelta0+m_dDelta01+m_dDelta1);i<COUNT;i++)
+	{
+		Delta=i/360.0*2*Pi;
+		m_ds2[i]=0;
+		dsdelta2[i]=0;
+		dxdelta=-m_de*sin(Delta)+
+				sqrt(m_dr0*m_dr0-m_de*m_de)*cos(Delta);
+		dydelta=-m_de*cos(Delta)-
+				sqrt(m_dr0*m_dr0-m_de*m_de)*sin(Delta);
+		sintheta2[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		costheta2[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+	}
+
+	//计算推程位移
 	if(m_nIndexMotion==2)
 	{
 		//计算行程
 		for(int i=0;i<(int)m_dDelta0;i++)
+		{
+			Delta=i/360.0*2*Pi;
 			m_ds2[i]=m_dh*i/m_dDelta0;	
+			dsdelta2[i]=m_dh/m_dDelta0;
+			dxdelta=(m_dh/m_dDelta0-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*cos(Delta);
+			dydelta=(m_dh/m_dDelta0-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*sin(Delta);
+			sintheta2[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta2[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
 	}
 	else
 	{
 		t2=new CData(tt,m_dDelta0,m_dh);
 		m_bData2Rise=true;
 		for(int i=0;i<(int)m_dDelta0;i++)
+		{
+			Delta=i/360.0*2*Pi;
 			m_ds2[i]=t2->s[i];
+			dsdelta2[i]=t2->v[i]*m_dh/m_dDelta0;
+			dxdelta=(t2->v[i]*m_dh/m_dDelta0-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*cos(Delta);
+			dydelta=(t2->v[i]*m_dh/m_dDelta0-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*sin(Delta);
+			sintheta2[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta2[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+
+		}
+		delete t2;
 	}
 
-
+	//计算回程位移
 	if (m_nIndexMotionReturn==2)
 	{
 		for(int i=(int)(m_dDelta0+m_dDelta01);i<(int)(m_dDelta0+m_dDelta01+m_dDelta1);i++)
+		{
+			Delta=i/360.0*2*Pi;
 			m_ds2[i]=m_dh*(1-(i-(m_dDelta0+m_dDelta01))/(m_dDelta1));
+			dsdelta[i]=-m_dh/m_dDelta1;
+			dxdelta=(-m_dh/m_dDelta1-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*cos(Delta);
+			dydelta=(-m_dh/m_dDelta1-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*sin(Delta);
+			sintheta2[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta2[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
 	}
 	else
 	{
 		m_bData2Return=true;	
 		h2=new CData(th,m_dDelta1,m_dh);
 		for(int i=(int)(m_dDelta0+m_dDelta01);i<(int)(m_dDelta0+m_dDelta01+m_dDelta1);i++)
+		{
+			Delta=i/360.0*2*Pi;
 			m_ds2[i]=m_dh-h2->s[i-(int)(m_dDelta0+m_dDelta01)];
+			dsdelta2[i]=-h2->v[i-(int)(m_dDelta0+m_dDelta01)]*m_dh/m_dDelta1;
+			dxdelta=(-h2->v[i-(int)(m_dDelta0+m_dDelta01)]*m_dh/m_dDelta1-m_de)*sin(Delta)+
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*cos(Delta);
+			dydelta=(-h2->v[i-(int)(m_dDelta0+m_dDelta01)]*m_dh/m_dDelta1-m_de)*cos(Delta)-
+				(sqrt(m_dr0*m_dr0-m_de*m_de)+m_ds2[i])*sin(Delta);
+			sintheta2[i]=dxdelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+			costheta2[i]=-dydelta/(sqrt(dxdelta*dxdelta+dydelta*dydelta));
+		}
+		delete h2;
 
 	}
 }
@@ -401,9 +580,17 @@ void CCam::CalcParameter2(void)
 void CCam::CalcPoint2(void)
 {initM(MATCOM_VERSION);
 	Mm delta;
+	Mm sinTheta=zeros(COUNT,1);
+	Mm cosTheta=zeros(COUNT,1);
 	Mm ss=zeros(COUNT,1);
+	Mm DsDelta2=zeros(COUNT,1);
 	for (int i=0;i<COUNT;i++)
+	{
 		ss.r(i+1)=m_ds2[i];
+		sinTheta.r(i+1)=sintheta2[i];
+		cosTheta.r(i+1)=costheta2[i];
+		DsDelta2.r(i+1)=dsdelta2[i];
+	}
 	//生成向量
 	delta=colon(1*Pi/180,2*Pi/COUNT,2*Pi);
 	//转置
@@ -411,8 +598,26 @@ void CCam::CalcPoint2(void)
 	Mm x;
 	Mm y;
 	//计算坐标
-	x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
-	y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
+	if(m_nIndexFollower==0)
+	{
+//		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
+//		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
+
+		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta))-times(m_drr0,cosTheta);
+		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta))-times(m_drr0,sinTheta);
+	}
+	else if(m_nIndexFollower==1)
+	{
+		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
+		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
+	}
+	else if (m_nIndexFollower==2)
+	{
+		x=times(m_dr0+ss,sin(delta))+times(DsDelta2,cos(delta));
+		y=times(m_dr0+ss,cos(delta))-times(DsDelta2,sin(delta));
+	}
+//	x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
+//	y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
 	
 	for (int i=0;i<COUNT;i++)
 	{

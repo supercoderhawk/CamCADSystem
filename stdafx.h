@@ -35,6 +35,11 @@
 // 关闭 MFC 对某些常见但经常可放心忽略的警告消息的隐藏
 #define _AFX_ALL_WARNINGS
 
+#define _CRTDBG_MAP_ALLOC
+#include "stdlib.h"
+#include "crtdbg.h"
+
+
 //定义采样点的个数
 #define NUM 20
 #define TIMES (360/NUM)
@@ -59,6 +64,26 @@
 
 
 #include <afxdisp.h>        // MFC 自动化类
+
+//dxflib类库
+#include "dl_dxf.h"
+#include <algorithm>
+#include <string>
+#include <cstdio>
+#include <cassert>
+#include <cmath>
+#include <fstream> 
+#include <tchar.h>
+#include "dl_attributes.h"
+#include "dl_codes.h"
+#include "dl_creationinterface.h"
+#include "dl_writer_ascii.h"
+
+#include <stdio.h>
+#include <string.h>
+
+#include "dl_writer_ascii.h"
+#include "dl_exception.h"
 
 
 

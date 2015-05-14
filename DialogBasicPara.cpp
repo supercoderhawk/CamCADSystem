@@ -27,6 +27,7 @@ CDialogBasicPara::CDialogBasicPara(CWnd* pParent /*=NULL*/)
 	t.SetSize(7);
 	hh.SetSize(7);
 	nCheckStyle=BST_CHECKED;
+	nIndexFollower=0;
 	nIndexMotion=1;
 	nIndexMotionReturn=1;
 }
