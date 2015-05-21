@@ -34,7 +34,7 @@ CCam::CCam(void)
 	m_bDataReturn=false;
 	m_bData2Rise=false;
 	m_bData2Return=false;
-	m_bGCode=false;
+	m_bGCode=false;	//初始化，此时未计算数控加工程序
 
 	
 }
@@ -56,7 +56,8 @@ CCam::~CCam(void)
 //	{
 //		delete h2;
 //	}
-	if(m_bGCode)
+	//如果动态生成了数控加工程序，就删除
+	if(m_bGCode)	
 		delete gcode;
 	
 }
@@ -118,16 +119,26 @@ void CCam::SetParameter(double Delta0, double Delta1,
 						CArray<double>* t,CArray<double>* hh,
 						int nIndexFollower)
 {
-	//输入基本参数
+	
+	//推程
 	m_dDelta0=Delta0;
+	//回程运动规律
 	m_dDelta1=Delta1;
+	//远休止角
 	m_dDelta01=Delta01;
+	//近休止角
 	m_dDelta02=Delta02;
+	//工作行程
 	m_dh=h;
+	//偏心距
 	m_de=e;
+	//基圆半径
 	m_dr0=r0;
-	m_drr0=rr0;
+	//如果从动件为滚子，输入滚子半径
+	if(nIndexMotion==0)
+		m_drr0=rr0;
 	//输入运动规律的t值
+	//推程回程运动规律T值，对应于通用简谐运动规律
 	tt[0]=0;
 	th[0]=0;
 	for (int i=0;i<7;i++)
@@ -142,16 +153,18 @@ void CCam::SetParameter(double Delta0, double Delta1,
 
 }
 
-// 计算采样点坐标
+// 计算采样点坐标，使用开源库matcom4.5
 void CCam::CalcPoint(void)
 {
 	//初始化matcom4.5
 	initM(MATCOM_VERSION);
+	//声明变量
 	Mm delta;
 	Mm ss=zeros(NUM,1);
 	Mm sinTheta=zeros(NUM,1);
 	Mm cosTheta=zeros(NUM,1);
 	Mm DsDelta=zeros(NUM,1);
+	//数据类型转换，double转为Mm
 	for (int i=0;i<NUM;i++)
 	{
 		ss.r(i+1)=m_ds[i];
@@ -170,22 +183,26 @@ void CCam::CalcPoint(void)
 	Mm x;
 	Mm y;
 	//计算坐标
+	//从动件为诶滚子
 	if(m_nIndexFollower==0)
 	{
 		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta))-times(m_drr0,cosTheta);
 		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta))-times(m_drr0,sinTheta);
 	}
+	//从动件为尖顶
 	else if(m_nIndexFollower==1)
 	{
 		x=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,sin(delta))+times(m_de,cos(delta));
 		y=times(sqrt(m_dr0*m_dr0-m_de*m_de)+ss,cos(delta))-times(m_de,sin(delta));
 	}
+	//从动件为推杆
 	else if (m_nIndexFollower==2)
 	{
 		x=times(m_dr0+ss,sin(delta))+times(DsDelta,cos(delta));
 		y=times(m_dr0+ss,cos(delta))-times(DsDelta,sin(delta));
 	}
 	
+	//数据类型转换，Mm转为double
 	for (int i=0;i<NUM;i++)
 	{
 		px[i]=x.r(i+1);
@@ -194,7 +211,8 @@ void CCam::CalcPoint(void)
 	exitM();
 }
 
-// 计算运动规律参数
+// 计算运动规律的位移（对应于采样点个数），
+//以及从动件为滚子时的参数
 void CCam::CalcParameter(void)
 {
 	double dxdelta;
@@ -385,8 +403,8 @@ void CCam::DrawCam3BSpline(CDC* pDC, double * mpx,
 	{
 		// 找到最大和最小的坐标，求得最大的范围，从而确定u的最小步长
 		int xMax, xMin, yMax, yMin;
-		xMax = xMin = mpx[i];
-		yMax = yMin = mpy[i];
+		xMax = xMin = (int)mpx[i];
+		yMax = yMin = (int)mpy[i];
 		if ( xMax < mpx[i+1] ) xMax = (int)mpx[i+1];
 		if ( xMin > mpx[i+1] ) xMin = (int)mpx[i+1];
 		if ( xMax < mpx[i+2] ) xMax = (int)mpx[i+2];
@@ -731,6 +749,8 @@ void CCam::CalcPreAngle(void)
 			speed[i]=-h2->v[i-(int)(m_dDelta0+m_dDelta01)]*m_dh/m_dDelta1;
 		for(int i=(int)(m_dDelta0+m_dDelta01+m_dDelta1);i<COUNT;i++)
 			speed[i]=0;
+		delete t2;
+		delete h2;
 
 	}
 	for (int i=0;i<COUNT;i++)

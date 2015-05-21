@@ -26,6 +26,7 @@ private:
 //	bool m_bIsDraw
 	CArray<double> t;
 	CArray<double> h;
+	CToolTipCtrl m_tt;
 	
 // 重写
 public:
@@ -70,6 +71,17 @@ public:
 	afx_msg void OnFileSave();
 	afx_msg void OnFileSaveAs();
 	void Save3BSpline(DL_Dxf* dxf,DL_WriterA* dw);
+//	afx_msg void OnTimer(UINT_PTR nIDEvent);
+//	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	// 绘制A4图纸
+	void DrawA4(DL_Dxf* dxf, DL_WriterA* dw);
+	// 绘制直线
+	void DrawDxfLine(DL_Dxf* dxf, DL_WriterA* dw, char* LayerName, CPoint pstart, CPoint pend,int width=-1);
+	// 绘制文字
+	void DrawDxfText(DL_Dxf* dxf, DL_WriterA* dw, char* str, CRect r1, int h,int mode=5,int width=200);
+	// 绘制图纸信息
+	void DrawDxfInfo(DL_Dxf* dxf, DL_WriterA* dw);
 };
 
 #ifndef _DEBUG  // CamCADSystemView.cpp 中的调试版本

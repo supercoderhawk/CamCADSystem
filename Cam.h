@@ -69,7 +69,7 @@ public:
 	// 计算采样点坐标
 	void CalcPoint(void);
 public:
-
+//当采样点个数为为NUM时
 	double px[NUM];		// 采样点横坐标
 	double py[NUM];		// 采样点纵坐标
 
@@ -80,7 +80,7 @@ public:
 	double sintheta[NUM];
 	double costheta[NUM];
 	double dsdelta[NUM];
-
+//当采样点个数为COUNT个时
 	double px2[COUNT];		// 采样点横坐标
 	double py2[COUNT];		// 采样点纵坐标
 
@@ -91,53 +91,59 @@ public:
 	double sintheta2[COUNT];
 	double costheta2[COUNT];
 	double dsdelta2[COUNT];
-
-	CString m_sKnifeID;
-	CString m_sKnifeFace;
-	double m_dFeed;
-	int m_nSpeed;
+//数控加工参数
+	CString m_sKnifeID;	//刀具编号
+	CString m_sKnifeFace;	//刀面
+	double m_dFeed;	//进给率
+	int m_nSpeed;	//主轴转速
 	
 
 public:
-	// 计算参数
+	// 计算运动规律的位移（对应于采样点个数），
+	//以及从动件为滚子时的参数
 	void CalcParameter(void);
-public:
 	// 行程
 	double m_ds[NUM];
 	double m_ds2[COUNT];
 	//压力角
 	double m_dPreAngle[COUNT];
+	//数控加工程序
 	CGCode* gcode;
 public:
-	// 计算控制点坐标
+	// 计算控制点坐标，采样点为NUM个
 	void CalcCtrlPoint(void);
+
+	//计算采样点为COUNT个时的各数据，意义与采样点为NUM时相同
+	void CalcParameter2(void);
+	void CalcPoint2(void);
+	void CalcCtrlPoint2(void);
 public:
+	
+	int m_nIndexMotion;	//所选推程运动规律，对应于输入对话框组合框中的顺序
+	int m_nIndexMotionReturn;	//所选回程运动规律，数值对应于输入对话框组合框中的顺序
+	int m_nIndexFollower;	//从动件类型，数值对应于输入对话框组合框中的顺序
 
-	int m_nIndexMotion;
-	int m_nIndexMotionReturn;
-	int m_nIndexFollower;
-
-	bool m_bDataRise;
+	bool m_bDataRise;	//
 	bool m_bDataReturn;
 	bool m_bData2Rise;
 	bool m_bData2Return;
-	bool m_bGCode;
+	bool m_bGCode;	//是否已生成数控加工代码
 
 public:
 	// 使用三次B样条曲线绘制凸轮
 	void DrawCam3BSpline(CDC* pDC, double * mpx, double * mpy, int nCount,CRect r1);
 	// 使用直线绘制凸轮轮廓
 	void DrawCamLine(CDC* pDC, double* px, double* py, int nCount, CRect r1, int mode);
-	void CalcParameter2(void);
-	void CalcPoint2(void);
-	void CalcCtrlPoint2(void);
+	
 	
 	// 设置数控加工参数
 	void SetParameter2(CString KnifeID, CString KnifeFace, double Feed, int Speed);
 	// 计算压力角
 	void CalcPreAngle(void);
+	//显示压力角
 	void ShowPresAngle(CDC* pDC,CRect r1);
 	// 输入许用压力角
 	void SetParameter3(double AllowAlpha);
+	//生成数控加工程序
 	void CreateGCode(void);
 };
